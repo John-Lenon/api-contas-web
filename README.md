@@ -1,17 +1,16 @@
 INTRODUÇÃO:
 
-Primeiramente configure um a string do banco de dados Sql Server nos arquivos appSettings.json e appSettings.Testing.json, o formado da string deve ser como esse:
+Primeiramente configure a string do banco de dados Sql Server nos arquivos appSettings.json e appSettings.Testing.json, o formado da string deve ser esse:
+
 Server=ENDERECO_BANCO;DataBase=NOME_BANCO;Trusted_Connection=True;MultipleActiveResultSets=true...
-Nas strings de conexão dos arquivos appSettings.json e appSettings.Testing.json, o ideal é que o nome dos bancos nos sejam diferentes, um para cada arquivo. Pois o enquanto 
-o arquivo appSettings.json reúne as configurações da aplicação para atendimento aos usuários, o arquivo appSettings.Testing.json serve exclusivamente para os testes de integração 
-da aplicação. 
+
+Em relação as strings de conexão dos arquivos appSettings.json e appSettings.Testing.json, o ideal é que o nome dos bancos nos sejam diferentes, um para cada arquivo. Pois o enquanto o arquivo appSettings.json reúne as configurações da aplicação para atendimento aos usuários, o arquivo appSettings.Testing.json serve exclusivamente para os testes de integração da aplicação. 
 
 ----------------
 
 INICIANDO A APLICAÇÃO: 
 
-A Primeira vez que a aplicação for iniciada, o processo pode levar até 30 segundos por que ela estará preparando o banco de dados, criando o banco de dados, as tabelas e inclusive 
-ela realiza uma inserção de dados iniciais, na tabela regras_dias_atrasos e também na tabela AspNetUsers. As próximas execuções do projeto não levarão o mesmo tempo para incicilização.
+A Primeira vez que a aplicação for iniciada, o processo pode levar até 30 segundos por que ela estará preparando o banco de dados, criando o banco de dados, as tabelas e inclusive ela realiza uma inserção de dados iniciais, na tabela regras_dias_atrasos e também na tabela AspNetUsers. As próximas execuções do projeto não levarão o mesmo tempo para incicilização.
 
 ----------------
 
