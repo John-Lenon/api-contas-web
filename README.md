@@ -10,11 +10,11 @@ Em relação as strings de conexão dos arquivos appSettings.json e appSettings.
 
 INICIANDO A APLICAÇÃO: 
 
-A Primeira vez que a aplicação for iniciada, o processo pode levar até 30 segundos por que ela estará preparando o banco de dados, criando o banco de dados, as tabelas e inclusive ela realiza uma inserção de dados iniciais, na tabela regras_dias_atrasos e também na tabela AspNetUsers. As próximas execuções do projeto não levarão o mesmo tempo para incicilização.
+A Primeira vez que a aplicação for iniciada, o processo pode levar até 30 segundos por que ela estará preparando o banco de dados, como a criação o banco, criação das tabelas e inclusive uma inserção de dados iniciais, na tabela regras_dias_atrasos e também na tabela AspNetUsers. As próximas execuções do projeto não levarão o mesmo tempo para incicilização.
 
 ----------------
 
-A Aplicação possui um recurso de autentiação de usuários, então para acessar as rotas de cadastro de contas a pagar, é necessário estar logado. Já existe um usuário cadastrado por padrão 
+A Aplicação possui um recurso de autentiação de usuários (isso não foi pedido no teste, mas resolvi incrementar), então para acessar as rotas de cadastro de contas a pagar, é necessário estar logado. Já existe um usuário cadastrado por padrão 
 no banco de dados quando a aplicação é iniciadad pela primeira vez, você pode cadastrar o seu, mas se preferir utilziar o usuário padrão, as credenciais são: 
 
 {
@@ -22,7 +22,8 @@ no banco de dados quando a aplicação é iniciadad pela primeira vez, você pod
     "Password": "123456" 
 }
 
-Após fazer o login, você receberá um JSON web token, e você precisa envia-lo em todas suas requisições a Api para que seja considerado como usuário autenticado. Então adicione o 
-token no cabeçalho Authorization, o valor do token deve ser descrito desta forma: Bearer [seu_token]...
+Após fazer o login, você receberá um JSON web token, e você precisa envia-lo em todas suas requisições a Api para que seja considerado como usuário autenticado. Então adicione o token no cabeçalho Authorization, o valor do token deve ser descrito desta forma: Bearer [seu_token]...
 
 Você pode testar os endpoints utilziando a interface gráfica do Swagger ou qualquer outro cliente http como Postman.
+
+
