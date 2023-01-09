@@ -5,6 +5,7 @@ using Domain.Entities.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -32,6 +33,7 @@ namespace Api.V1.Autenticacao
         }
 
         [HttpPost("new-account")]
+        [SwaggerOperation(Description = "Registrar usuário", Tags = new[] { "Autenticação" })]
         public async Task<IActionResult> Registrar([FromBody] UsuarioAddDTO usuario)
         {
            // incluir validacao registro usuario
@@ -56,6 +58,7 @@ namespace Api.V1.Autenticacao
         }
 
         [HttpPost("login")]
+        [SwaggerOperation(Description = "Login usuário", Tags = new[] { "Autenticação" })]
         public async Task<IActionResult> Login(UsuarioLoginDTO loginUser)
         {
             //Incluir validacao do login

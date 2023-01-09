@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Cobranca;
+﻿using Domain.Configurations;
+using Domain.Entities.Cobranca;
 using Domain.Interfaces.Services.Cobranca;
 using Domain.Services.Base;
 using Domain.Validations.Cobranca;
@@ -9,22 +10,22 @@ namespace Domain.Services.Cobranca
 {
     public class ContaService : ServicesBase<Conta>, IContaService
     {
-        public ContaService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ContaService(InjectorService injector) : base(injector)
         {
         }
 
         public void CalcularValorCorrigido(Conta entity)
         {
-            var valorMulta = entity.ValorOriginal * entity.Multa;
-            var valorTotalJurosDias = entity.ValorOriginal * entity.JurosDia * entity.QuantidadeDiasAtraso;
-            entity.ValorCorrigido = entity.ValorOriginal + valorMulta + valorTotalJurosDias;
+            var valorMulta = Math.Round((entity.ValorOriginal * (entity.Multa / 100)), 2);
+            var valorTotalJurosDias = Math.Round((entity.ValorOriginal * (entity.JurosDia / 100) * entity.QuantidadeDiasAtraso), 2);
+            entity.ValorCorrigido = Math.Round((entity.ValorOriginal + valorMulta + valorTotalJurosDias), 2);
         } 
 
         public bool ValidarConta(Conta entity)
         {
             if(entity is null)
             {
-                NotificarErro("Conta inválida.");
+                NotificarErro("Algum dado da conta está num formato inválido.");
                 return false;
             }
             if (!ValidateFieldsEntity(new ContasAddValidator(), entity)) return false;
@@ -44,20 +45,29 @@ namespace Domain.Services.Cobranca
                     {
                         entity.Multa = 2;
                         entity.JurosDia = 0.1M;
+                        return;
                     }
                     else if (regra.DiasAtrasoMinimo == 4 && regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso &&
                         regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
                     {
                         entity.Multa = 3;
                         entity.JurosDia = 0.2M;
+                        return;
 
                     }
                     else if (regra.DiasAtrasoMinimo == 11 && regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
                     {
                         entity.Multa = 5;
                         entity.JurosDia = 0.3M;
+                        return;
                     }
                 }
+            }
+            else
+            {
+                entity.QuantidadeDiasAtraso = 0;
+                entity.Multa = 0;
+                entity.JurosDia = 0;
             }
         }
     }

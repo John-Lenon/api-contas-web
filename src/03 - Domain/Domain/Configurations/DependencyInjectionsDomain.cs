@@ -9,6 +9,7 @@ namespace Domain.Configurations
         public static IServiceCollection AddDependencyInjectionsDomain(this IServiceCollection services)
         {
             services.AddScoped<IContaService, ContaService>();
+            services.AddScoped(provider => new InjectorService(provider));
             return services;
         }
     }

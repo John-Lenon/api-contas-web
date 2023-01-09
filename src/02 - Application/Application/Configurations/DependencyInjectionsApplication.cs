@@ -20,7 +20,6 @@ namespace Application.Configurations
             services.AddScoped<IRegraDiaAtrasoAppService, RegraDiaAtrasoAppService>();
             services.AddScoped<INotificador, Notificador>();
 
-
             services.AddScoped<IRegraDiaAtrasoRepository, RegraDiaAtrasoRepository>();
             services.AddScoped<IContaRepository, ContaRepository>();
 

@@ -5,6 +5,6 @@ namespace Application.Interfaces.Services.Cobranca
 {
     public interface IRegraDiaAtrasoAppService
     {
-        Task<IEnumerable<TResult>> GetAsync<TFilter, TResult>(TFilter filter);
+        Task<List<TResult>> GetAsync<TFilter, TResult>(TFilter filter);
     }
 }

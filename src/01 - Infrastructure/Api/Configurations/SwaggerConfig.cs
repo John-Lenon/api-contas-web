@@ -68,7 +68,7 @@ namespace Api.Configurations
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var apiDescription = context.ApiDescription;
-            //operation.Deprecated = apiDescription.IsDeprecated();
+            operation.Deprecated = apiDescription.IsDeprecated();
 
             if (operation.Parameters == null) return;
 
@@ -103,10 +103,10 @@ namespace Api.Configurations
         {
             var info = new OpenApiInfo
             {
-                Title = "API - John Lenon Testes",
+                Title = "Metadados | Sistemas de RH",
                 Version = description.ApiVersion.ToString(),
-                Description = "Essa API faz parte do curso de API REST",
-                Contact = new OpenApiContact { Name = "John Lenon dos Reis", Email = "johnlinux@gmail.com" }
+                Description = "Teste para dandidatura",
+                Contact = new OpenApiContact { Name = "John Lenon dos Reis", Email = "johnlenondosreis@outlook.com" }
             };
 
             if (description.IsDeprecated)

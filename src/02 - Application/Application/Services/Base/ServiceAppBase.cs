@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Configurations;
 using Domain.Interfaces.Application;
 using Domain.Interfaces.Repositorys.Base;
 using Domain.Utilities;
@@ -19,28 +20,30 @@ namespace Application.Services.Base
         protected IMapper _autoMapper { get; }
         protected TRepository _repository { get; }
 
-        public ServiceAppBase(IServiceProvider serviceProvider)
+        public ServiceAppBase(InjectorService injector)
         {
-            _notificador = serviceProvider.GetRequiredService<INotificador>();
-            _autoMapper = serviceProvider.GetRequiredService<IMapper>();
-            _repository = serviceProvider.GetRequiredService<TRepository>();
+            _notificador = injector.GetService<INotificador>();
+            _autoMapper = injector.GetService<IMapper>();
+            _repository = injector.GetService<TRepository>();
         }
 
-        public async Task<IEnumerable<TResult>> GetAsync<TFilter, TResult>(TFilter filter)
+        public virtual async Task<List<TResult>> GetAsync<TFilter, TResult>(TFilter filter)
         {
             var listResult = await _repository.Get(QueryGet(filter)).ToListAsync();
-            return _autoMapper.Map<IEnumerable<TResult>>(listResult);
+            if (listResult is null || !listResult.Any()) return null;
+            return _autoMapper.Map<List<TResult>>(listResult);
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            return await _repository.AddAsync(entity);
+            var teste = await _repository.AddAsync(entity);
+            return teste;
         }
 
-        protected void NotificarErro(string mensagem) =>
+        protected virtual void NotificarErro(string mensagem) =>
              _notificador.Add(new Notificacao(EnumTipoNotificacao.Error, mensagem));
 
-        protected bool OperacaoValida() =>
+        public virtual bool OperacaoValida() =>
             !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Error).Count() > 0);
 
         protected virtual Expression<Func<TEntity, bool>> QueryGet(object filter) => x => true;

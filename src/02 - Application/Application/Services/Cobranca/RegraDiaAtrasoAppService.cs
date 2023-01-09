@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.Cobranca;
 using Application.Interfaces.Services.Cobranca;
 using Application.Services.Base;
+using Domain.Configurations;
 using Domain.Entities.Cobranca;
 using Domain.Interfaces.Repositorys.Cobranca;
 using System;
@@ -10,7 +11,7 @@ namespace Application.Services.Cobranca
 {
     public class RegraDiaAtrasoAppService : ServiceAppBase<RegraDiaAtraso, IRegraDiaAtrasoRepository>, IRegraDiaAtrasoAppService
     {
-        public RegraDiaAtrasoAppService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public RegraDiaAtrasoAppService(InjectorService injector) : base(injector)
         {
         }
 

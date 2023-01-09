@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces.Application;
+﻿using Domain.Configurations;
+using Domain.Interfaces.Application;
 using Domain.Interfaces.Services.Base;
 using Domain.Utilities;
 using FluentValidation;
@@ -9,11 +10,11 @@ namespace Domain.Services.Base
 {
     public class ServicesBase<TEntity> : IServicesBase<TEntity> where TEntity : class, new()
     {
-        protected INotificador Notificador { get; private set; }
+        protected INotificador Notificador { get; }
 
-        public ServicesBase(IServiceProvider serviceProvider) 
+        public ServicesBase(InjectorService injector)
         {
-            Notificador = serviceProvider.GetRequiredService<INotificador>();
+            Notificador = injector.GetService<INotificador>();
         }
 
         public bool ValidateFieldsEntity<TValidator>(TValidator validator, TEntity entity) where TValidator : AbstractValidator<TEntity> 
@@ -28,8 +29,16 @@ namespace Domain.Services.Base
             return false;
         }
 
-        public void NotificarErro(string mensagem) =>
+        public virtual void NotificarErro(string mensagem) =>
              Notificador.Add(new Notificacao(EnumTipoNotificacao.Error, mensagem));
 
+    }
+
+    public class ServicesContainerDi 
+    { 
+        public TService GetService<TService>(IServiceProvider serviceProvider)
+        {
+            return serviceProvider.GetRequiredService<TService>();
+        }
     }
 }

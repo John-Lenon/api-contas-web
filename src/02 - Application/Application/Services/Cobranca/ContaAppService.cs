@@ -1,13 +1,12 @@
 ﻿using Application.DTOs.Cobranca;
 using Application.Interfaces.Services.Cobranca;
 using Application.Services.Base;
+using Domain.Configurations;
 using Domain.Entities.Cobranca;
 using Domain.Interfaces.Repositorys.Cobranca;
 using Domain.Interfaces.Services.Cobranca;
-using Domain.Validations.Cobranca;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -18,9 +17,9 @@ namespace Application.Services.Cobranca
         private readonly IContaService _contaService;
         private readonly IRegraDiaAtrasoAppService _regrasDiasAtraso;
 
-        public ContaAppService(IServiceProvider serviceProvider,
+        public ContaAppService(InjectorService injector,
             IContaService contaService,
-            IRegraDiaAtrasoAppService regrasDiasAtraso) : base(serviceProvider)
+            IRegraDiaAtrasoAppService regrasDiasAtraso) : base(injector)
         {
             _contaService = contaService;
             _regrasDiasAtraso = regrasDiasAtraso;
@@ -36,7 +35,7 @@ namespace Application.Services.Cobranca
 
             _contaService.AplicarMultaContaAtrasada(entity, listRegras);
             _contaService.CalcularValorCorrigido(entity);
-            
+
             var result = await AddAsync(entity);
             await _repository.SaveChavesAsync();
 
@@ -56,11 +55,11 @@ namespace Application.Services.Cobranca
 
         #region Metodos Privados 
 
-        private async Task<IEnumerable<RegraDiaAtraso>> ObterRegrasDiasAtrasoAsync()
+        public virtual async Task<IEnumerable<RegraDiaAtraso>> ObterRegrasDiasAtrasoAsync()
         {
             var listRegras = await _regrasDiasAtraso.GetAsync<RegraDiaAtrasoFilterDTO, RegraDiaAtrasoDTO>(new RegraDiaAtrasoFilterDTO());
 
-            if (listRegras is null || listRegras.Count() == 0)
+            if (listRegras is null)
             {
                 NotificarErro("Nenhuma Regra para dias atrasados cadastrada.");
                 return null;

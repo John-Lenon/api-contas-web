@@ -26,31 +26,35 @@ namespace Api.Base
             {
                 var erros = Notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Error);
 
-                if (erros.Any()) return BadRequest(new ResponseResultDTO(null)
+                if (erros.Any()) return BadRequest(new ResponseResultDTO<TResponse>(default(TResponse))
                 {
                     Mensagens = erros.ToArray()
                 });
 
                 var informacoes = Notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Informacao);
                 if (informacoes.Any())
-                    return Ok(new ResponseResultDTO(contentResponse) { Mensagens = informacoes.ToArray() });
+                    return Ok(new ResponseResultDTO<TResponse>(contentResponse) { Mensagens = informacoes.ToArray() });
             }
 
-            return Ok(new ResponseResultDTO(contentResponse));
+            return Ok(new ResponseResultDTO<TResponse>(contentResponse));
         }
 
         protected void NotificarErro(string mensagem) =>
              Notificador.Add(new Notificacao(EnumTipoNotificacao.Error, mensagem));
     }
 
-    public class ResponseResultDTO 
+    public class ResponseResultDTO<TResponse> 
     {        
-        public object Data { get; set; } 
+        public TResponse Data { get; set; } 
         public Notificacao[] Mensagens { get; set; }
 
-        public ResponseResultDTO(object data)
+        public ResponseResultDTO(TResponse data)
         {
             Data = data;
+        }
+
+        public ResponseResultDTO()
+        {
         }
     }
 }

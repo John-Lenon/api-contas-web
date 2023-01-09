@@ -10,6 +10,10 @@
             Tipo = tipo;
             Mensagem = mensagem;
         }
+
+        public Notificacao()
+        {
+        }
     }
 
     public enum EnumTipoNotificacao

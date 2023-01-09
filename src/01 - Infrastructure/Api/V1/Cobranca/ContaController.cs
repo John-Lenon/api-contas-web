@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Api.V1.Cobranca
@@ -24,8 +25,8 @@ namespace Api.V1.Cobranca
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ContaGetDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseResultDTO<IEnumerable<ContaGetDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResultDTO<ContaGetDTO>),StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Listar contas", Tags = new[] { "Contas" })]
         public async Task<IActionResult> GetAsync([FromQuery]ContaFilterDTO filter)
         {
@@ -34,7 +35,7 @@ namespace Api.V1.Cobranca
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ContaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResultDTO<ContaDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Cadastrar nova conta", Tags = new[] { "Contas" })]
         public async Task<IActionResult> AddAsync([FromBody] ContaDTO conta)

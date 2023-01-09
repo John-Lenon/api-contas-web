@@ -1,4 +1,4 @@
-using Api.Configurations;
+﻿using Api.Configurations;
 using Application.Configurations;
 using Application.Extensions;
 using AutoMapper;
@@ -17,11 +17,13 @@ using System.Reflection;
 
 namespace Api
 {
-    public class Startup
+    public class StartupApiTests
     {
-        public Startup(IConfiguration configuration)
+        public StartupApiTests(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                    .AddJsonFile($"appsettings.Testing.json")
+                    .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -29,10 +31,10 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.WebApiConfig();
-            services.AddSwaggerConfig();
+
             services.AddIdentityConfiguration(Configuration);
             services.AddDependencyInjectionsApp();
-            services.AddDependencyInjectionsDomain();            
+            services.AddDependencyInjectionsDomain();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider,
@@ -50,8 +52,6 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
-
-            app.UseSwaggerConfig(provider);
         }
     }
 }

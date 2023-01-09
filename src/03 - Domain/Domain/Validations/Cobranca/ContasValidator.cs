@@ -8,6 +8,8 @@ namespace Domain.Validations.Cobranca
     {
         public ContasAddValidator()
         {
+            var dataMinima = new DateTime(2000, 1, 1);
+
             RuleFor(e => e.Id)
                 .Must(id => id == 0).WithMessage("O campo Id não pode ser definido manualmente");
 
@@ -21,18 +23,15 @@ namespace Domain.Validations.Cobranca
 
             RuleFor(e => e.DataVencimento)
                 .NotEmpty().WithMessage("Campo Data Vencimento é obrigatório.")
-                .Must((conta, dataVencimento) => dataVencimento <= conta.DataPagamento).WithMessage("Campo Data Vencimento não pode ser maior que o campo Data Pagamento.")
-                .GreaterThanOrEqualTo(DateTime.Now.Date).WithMessage("Campo Data Vencimento deve ser maior ou igual {ComparisonValue}.");
+                .Must(data => data >= dataMinima).WithMessage("Data Vencimento Inválida.");
 
             RuleFor(e => e.DataPagamento)
                 .NotEmpty().WithMessage("Campo Data Pagamento é obrigatório.")
-                .Must((conta, dataPagamento) => dataPagamento >= conta.DataVencimento).WithMessage("Campo Data Pagamento deve ser maior ou igual a data do vencimento.")               
-                .GreaterThan(DateTime.Now.Date).WithMessage("Campo Data Pagamento deve ser maior que {ComparisonValue}.");
+                .Must(data => data >= dataMinima).WithMessage("Data Pagamento Inválida.");                                      
 
             RuleFor(e => e.QuantidadeDiasAtraso)
                 .GreaterThanOrEqualTo(0).WithName("O campo Quantidade Dias Atraso deve ser maior ou igual a {ComparisonValue}.");
             
-
             RuleFor(e => e.ValorCorrigido)
                 .GreaterThanOrEqualTo(0).WithName("O campo Valor Corrigido deve ser maior ou igual a {ComparisonValue}.");
 
