@@ -33,6 +33,20 @@ namespace Data.Repository.Base
             return result.Entity;
         }
 
+        public void Update(TEntity entity)
+        {
+            DbSet.Update(entity);
+        }
+
+        public async Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            var result = await DbSet.FirstOrDefaultAsync(expression);
+            if (result is null) return null;
+            return DbSet.Remove(result).Entity;
+        }
+
+        public async Task<TEntity> GetByIdAsync(params object[] ids) => await DbSet.FindAsync(ids);
+
         public async Task SaveChavesAsync() => await ContasWebContext.SaveChangesAsync();
     }
 }

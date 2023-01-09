@@ -15,6 +15,8 @@ namespace Application.Services.Cobranca
         {
         }
 
+        protected override Expression<Func<RegraDiaAtraso, bool>> QueryDelete(int id) => x => x.Id == id;         
+
         protected override Expression<Func<RegraDiaAtraso, bool>> QueryGet(object filterBase)
         {
             var filter = (RegraDiaAtrasoFilterDTO)filterBase;

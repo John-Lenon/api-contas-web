@@ -20,7 +20,7 @@ namespace Api.Base
             AutoMapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
-        protected IActionResult CustomResponse<TResponse>(TResponse contentResponse)
+        protected IActionResult CustomResponse<TResponse>(TResponse contentResponse) 
         {
             if (Notificador.ListNotificacoes.Count() >= 1)
             {

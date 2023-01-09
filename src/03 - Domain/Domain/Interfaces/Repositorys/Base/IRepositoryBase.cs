@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Repositorys.Base
@@ -12,6 +11,12 @@ namespace Domain.Interfaces.Repositorys.Base
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> expression);
 
         Task<TEntity> AddAsync(TEntity entity);
+
+        Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> expression);
+
+        void Update(TEntity entity);
+
+        Task<TEntity> GetByIdAsync(params object[] ids);
 
         Task SaveChavesAsync();
     }

@@ -53,7 +53,7 @@ namespace Application.Services.Cobranca
             (filter.VencimentoFinal == null || filter.VencimentoFinal >= x.DataVencimento);
         }
 
-        #region Metodos Privados 
+        protected override Expression<Func<Conta, bool>> QueryDelete(int idConta) => x => x.Id == idConta;
 
         public virtual async Task<IEnumerable<RegraDiaAtraso>> ObterRegrasDiasAtrasoAsync()
         {
@@ -66,7 +66,5 @@ namespace Application.Services.Cobranca
             }
             return _autoMapper.Map<IEnumerable<RegraDiaAtraso>>(listRegras);
         }
-
-        #endregion
     }
 }

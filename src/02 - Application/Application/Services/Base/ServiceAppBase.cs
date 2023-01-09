@@ -36,8 +36,32 @@ namespace Application.Services.Base
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            var teste = await _repository.AddAsync(entity);
-            return teste;
+            var result = await _repository.AddAsync(entity);
+            return result;
+        }
+
+        public virtual async Task UpdateAsync<TDto>(TDto dto, object[] ids, bool saveChanges = true)
+        {
+            var entity = await _repository.GetByIdAsync(ids);
+            if(entity is null)
+            {
+                NotificarErro("Conta não encontrada.");
+                return;
+            }
+            _autoMapper.Map(dto, entity);
+            _repository.Update(entity);
+            if (saveChanges) await _repository.SaveChavesAsync();
+        }
+
+        public virtual async Task DeleteAsync(int id, bool saveChanges = true)
+        {
+            var result = await _repository.DeleteAsync(QueryDelete(id));
+            if (result is null)
+            {
+                NotificarErro("Conta não encontrada.");
+                return;
+            }
+            if (saveChanges) await _repository.SaveChavesAsync();
         }
 
         protected virtual void NotificarErro(string mensagem) =>
@@ -46,6 +70,8 @@ namespace Application.Services.Base
         public virtual bool OperacaoValida() =>
             !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Error).Count() > 0);
 
-        protected virtual Expression<Func<TEntity, bool>> QueryGet(object filter) => x => true;
+        protected abstract Expression<Func<TEntity, bool>> QueryGet(object filter);
+
+        protected abstract Expression<Func<TEntity, bool>> QueryDelete(int idConta);
     }
 }

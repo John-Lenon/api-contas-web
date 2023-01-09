@@ -43,5 +43,26 @@ namespace Api.V1.Cobranca
             var result = await _contaAppService.AddAsync(conta);
             return CustomResponse(result);
         }
+
+        [HttpPut("{idConta}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Description = "Atualizar conta", Tags = new[] { "Contas" })]
+        public async Task<IActionResult> UpdateAsync([FromRoute]int idConta, [FromBody] ContaDTO conta)
+        {
+            conta.Id = idConta;
+            await _contaAppService.UpdateAsync(conta, new object[] { idConta });
+            return CustomResponse<ContaDTO>(null);
+        }
+
+        [HttpDelete("{idConta}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Description = "Deletar conta", Tags = new[] { "Contas" })]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int idConta)
+        {
+            await _contaAppService.DeleteAsync(idConta);
+            return CustomResponse<ContaDTO>(null);
+        }
     }
 }
