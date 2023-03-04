@@ -41,8 +41,9 @@ namespace Api
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             services.ConfigurarBancoDados();
-
+            //Teste
             app.UseCors("Production");
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
