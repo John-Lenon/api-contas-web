@@ -26,7 +26,7 @@ namespace Application.Services.Cobranca
         }
 
         public async Task<ContaDTO> AddAsync(ContaDTO contaDto)
-        {
+        {           
             var entity = _autoMapper.Map<Conta>(contaDto);
             if (!_contaService.ValidarConta(entity)) return null;
 

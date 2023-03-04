@@ -29,11 +29,21 @@ namespace Api.Configurations
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Develoment", builder =>
+                options.AddPolicy("Production", builder =>
+                {
                     builder.AllowAnyOrigin()
                            .AllowAnyMethod()
                            .AllowAnyHeader()
-                           .AllowCredentials());
+                           .AllowCredentials()
+                           .WithOrigins(
+                            "http://127.0.0.1:8080",
+                            "http://127.0.0.1",
+                            "http://localhost",
+                            "https://localhost", 
+                            "http://localhost:9090",
+                            "https://localhost:9090"
+                            );
+                });
             });
 
             return services;

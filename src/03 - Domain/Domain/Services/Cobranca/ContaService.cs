@@ -40,27 +40,12 @@ namespace Domain.Services.Cobranca
                 entity.QuantidadeDiasAtraso = (entity.DataPagamento - entity.DataVencimento).Days;
                 foreach (var regra in listRegrasAtraso)
                 {
-                    if (regra.DiasAtrasoMinimo == 1 && regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso &&
-                        regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
+                    if (regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso && regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
                     {
-                        entity.Multa = 2;
-                        entity.JurosDia = 0.1M;
+                        entity.Multa = regra.Multa;
+                        entity.JurosDia = regra.JurosDia;
                         return;
-                    }
-                    else if (regra.DiasAtrasoMinimo == 4 && regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso &&
-                        regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
-                    {
-                        entity.Multa = 3;
-                        entity.JurosDia = 0.2M;
-                        return;
-
-                    }
-                    else if (regra.DiasAtrasoMinimo == 11 && regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
-                    {
-                        entity.Multa = 5;
-                        entity.JurosDia = 0.3M;
-                        return;
-                    }
+                    }                    
                 }
             }
             else

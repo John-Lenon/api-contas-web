@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 - Domain", "03 - Domain", "{035B3E1A-CC46-4664-832A-C10BFBF7D6D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C940C940-D9AF-4250-8533-C613E3ECAA98}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Application", "02 - Application", "{3435DD8D-9B43-434F-8036-73271450C7E3}"
 EndProject
@@ -22,6 +25,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\03 - Domain\Domain\Domain.csproj", "{0DA6C246-CE0F-44C4-A169-94456070BBB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "src\01 - Infrastructure\Unit.Tests\Unit.Tests.csproj", "{180E2D5F-6851-4A93-999C-CAC0429B7353}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{70302E46-65F4-46CD-90A1-12894A71ECAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

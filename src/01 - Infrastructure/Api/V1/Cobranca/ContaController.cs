@@ -13,7 +13,7 @@ namespace Api.V1.Cobranca
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:ApiVersion}/conta")]
-    [Authorize]
+    //[Authorize]
     public class ContaController : MainController
     {
         private readonly IContaAppService _contaAppService;

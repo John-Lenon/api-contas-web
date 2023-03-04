@@ -42,6 +42,7 @@ namespace Api
 
             services.ConfigurarBancoDados();
 
+            app.UseCors("Production");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
