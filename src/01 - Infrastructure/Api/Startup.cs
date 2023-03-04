@@ -42,6 +42,7 @@ namespace Api
 
             services.ConfigurarBancoDados();
 
+            //Teste
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
