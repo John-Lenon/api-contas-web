@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Interfaces;
+using System;
 
 namespace Application.DTOs.Cobranca
 {
@@ -14,16 +15,16 @@ namespace Application.DTOs.Cobranca
 
     public class ContaDTO
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string Nome { get; set; }
         public decimal ValorOriginal { get; set; }
-        public DateTime DataVencimento { get; set; }
-        public DateTime DataPagamento { get; set; }
-        public int QuantidadeDiasAtraso { get; set; }
-        public decimal ValorCorrigido { get; set; }
-        public decimal Multa { get; set; }
-        public decimal JurosDia { get; set; }
-        public string UsuarioId { get; set; }
+        public DateTime DataVencimento { get; set; } = DateTime.MinValue;
+        public DateTime DataPagamento { get; set; } = DateTime.MinValue;
+        public int QuantidadeDiasAtraso { get; set; } = 0;
+        public decimal ValorCorrigido { get; set; } = 0;
+        public decimal Multa { get; set; } = 0;
+        public decimal JurosDia { get; set; } = 0;
+        public string UsuarioId { get; set; } 
     }
 
     public class ContaFilterDTO

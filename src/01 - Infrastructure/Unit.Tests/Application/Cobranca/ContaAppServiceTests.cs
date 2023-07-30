@@ -71,6 +71,4 @@ namespace Unit.Tests.Application.Cobranca
             _contaRepositoryMock.Setup(p => p.AddAsync(contaEntity)).ReturnsAsync(default(Conta));
         }
     }
-
-
 }

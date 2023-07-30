@@ -2,13 +2,13 @@
 {
     public class Notificacao
     {
-        public EnumTipoNotificacao Tipo { get; set; }
-        public string Mensagem { get; set; }
+        public EnumTipoNotificacao Tipo { get; set; } = EnumTipoNotificacao.Informacao;
+        public string Descricao { get; set; }
 
         public Notificacao(EnumTipoNotificacao tipo, string mensagem)
         {
             Tipo = tipo;
-            Mensagem = mensagem;
+            Descricao = mensagem;
         }
 
         public Notificacao()
@@ -18,7 +18,8 @@
 
     public enum EnumTipoNotificacao
     {
-        Informacao = 1,
-        Error = 2,
+        Informacao = 200,
+        Erro = 400,
+        ErroInterno = 500,
     }
 }

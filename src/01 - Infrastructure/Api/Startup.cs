@@ -1,19 +1,16 @@
 using Api.Configurations;
+using Api.Extensions.Middlewares;
 using Application.Configurations;
 using Application.Extensions;
-using AutoMapper;
 using Data.Configurations;
 using Domain.Configurations;
-using Domain.Entities.Usuarios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Reflection;
 
 namespace Api
 {
@@ -32,17 +29,19 @@ namespace Api
             services.AddSwaggerConfig();
             services.AddIdentityConfiguration(Configuration);
             services.AddDependencyInjectionsApp();
-            services.AddDependencyInjectionsDomain();            
+            services.AddDependencyInjectionsDomain();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider,
             IServiceProvider services)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment()) 
+                app.UseDeveloperExceptionPage();
 
-            services.ConfigurarBancoDados();
-            //Teste
+            services.ConfigurarBancoDados();            
             app.UseCors("Production");
+
+            app.UseMiddleware<MiddlewareException>();
 
             app.UseRouting();
             app.UseAuthentication();

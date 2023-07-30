@@ -1,4 +1,6 @@
-﻿using Api.Base;
+﻿using Api.Configurations;
+using Api.Extensions.Atributos;
+using Api.V1.Base;
 using Application.Configurations;
 using Application.DTOs.Usuario;
 using Domain.Entities.Usuarios;
@@ -14,18 +16,18 @@ using System.Threading.Tasks;
 
 namespace Api.V1.Autenticacao
 {
-    [ApiVersion("1.0")]
-    [Route("api/v{version:ApiVersion}/auth")]
+    [RouterController("auth")]
+    [ApiVersion(ApiConfig.V1)]
     public class AuthController : MainController
     {
-        private readonly SignInManager<Usuario> _signManager;        
+        private readonly SignInManager<Usuario> _signManager;
         private readonly UserManager<Usuario> _userManager;
-        private readonly AppSettings _appSettings;
+        private readonly ConfiguracoesJwt _appSettings;
 
-        public AuthController(IServiceProvider serviceProvider, 
-            SignInManager<Usuario> signManager, 
-            UserManager<Usuario> userManager, 
-            AppSettings appSettings) : base(serviceProvider)
+        public AuthController(IServiceProvider serviceProvider,
+            SignInManager<Usuario> signManager,
+            UserManager<Usuario> userManager,
+            ConfiguracoesJwt appSettings) : base(serviceProvider)
         {
             _signManager = signManager;
             _userManager = userManager;
@@ -34,10 +36,8 @@ namespace Api.V1.Autenticacao
 
         [HttpPost("new-account")]
         [SwaggerOperation(Description = "Registrar usuário", Tags = new[] { "Autenticação" })]
-        public async Task<IActionResult> Registrar([FromBody] UsuarioAddDTO usuario)
+        public async Task<object> Registrar([FromBody] UsuarioAddDTO usuario)
         {
-           // incluir validacao registro usuario
-
             var user = new Usuario
             {
                 UserName = usuario.Nome,
@@ -45,69 +45,71 @@ namespace Api.V1.Autenticacao
                 EmailConfirmed = true,
                 Cpf = usuario.Cpf,
             };
-           
+
             var result = await _userManager.CreateAsync(user, usuario.Password);
 
             if (result.Succeeded)
-                return CustomResponse(await GerarJWT(usuario.Email));
+                return await GerarJWT(usuario.Email);
 
             foreach (var error in result.Errors)
                 NotificarErro(error.Description);
 
-            return CustomResponse(usuario);
+            return usuario;
         }
 
         [HttpPost("login")]
         [SwaggerOperation(Description = "Login usuário", Tags = new[] { "Autenticação" })]
-        public async Task<IActionResult> Login(UsuarioLoginDTO loginUser)
+        public async Task<object> Login(UsuarioLoginDTO loginUser)
         {
-            //Incluir validacao do login
             var usuario = await _userManager.FindByEmailAsync(loginUser.Email);
-            if(usuario is null)
+            if (usuario is null)
             {
                 NotificarErro("Usuário não encontrado.");
-                return CustomResponse(loginUser);
+                return loginUser;
             }
+
             var resultLogin = await _signManager.PasswordSignInAsync(usuario.UserName, loginUser.Password, false, true);
 
             if (resultLogin.Succeeded)
             {
-                return CustomResponse(await GerarJWT(loginUser.Email));
+                return await GerarJWT(loginUser.Email);
             }
             if (resultLogin.IsLockedOut)
             {
                 NotificarErro("Usuario temporariamente bloqueado por tentativas invalidas!");
-                return CustomResponse(loginUser);
+                return loginUser;
             }
 
             NotificarErro("Usuario ou senha incorreto");
-            return CustomResponse(loginUser);
+            return loginUser;
         }
 
 
         private async Task<string> GerarJWT(string email)
-        {           
+        {
             var user = await _userManager.FindByEmailAsync(email);
-            var claims = await _userManager.GetClaimsAsync(user);           
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));          
+
+            var claims = await _userManager.GetClaimsAsync(user);
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
 
-            var tokenHandler = new JwtSecurityTokenHandler();               
+            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
-            {               
+            {
                 Subject = identityClaims,
                 Issuer = _appSettings.Emissor,
-                Audience = _appSettings.ValidoEm,                
+                //Audience = _appSettings.ValidoEm,                
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
-           
+
             var encodedToken = tokenHandler.WriteToken(token);
             return encodedToken;
-        }       
+        }
     }
 }

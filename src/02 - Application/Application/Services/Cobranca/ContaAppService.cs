@@ -5,6 +5,7 @@ using Domain.Configurations;
 using Domain.Entities.Cobranca;
 using Domain.Interfaces.Repositorys.Cobranca;
 using Domain.Interfaces.Services.Cobranca;
+using Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -28,7 +29,7 @@ namespace Application.Services.Cobranca
         public async Task<ContaDTO> AddAsync(ContaDTO contaDto)
         {           
             var entity = _autoMapper.Map<Conta>(contaDto);
-            if (!_contaService.ValidarConta(entity)) return null;
+            if (!_contaService.ValidarInclusaoConta(entity)) return null;
 
             var listRegras = await ObterRegrasDiasAtrasoAsync();
             if (!OperacaoValida()) return null;
@@ -42,7 +43,25 @@ namespace Application.Services.Cobranca
             return _autoMapper.Map<ContaDTO>(result);
         }
 
-        protected override Expression<Func<Conta, bool>> QueryGet(object filterBase)
+
+        public async Task UpdateAsync(ContaDTO dto, object[] ids)
+        {
+            var contaEntity = await _repository.GetByIdAsync(ids);
+            _autoMapper.Map(dto, contaEntity);
+            if (!_contaService.ValidarUpdateConta(contaEntity)) return;
+
+            await UpdateAsync(contaEntity, true);
+            return;
+        }
+
+        public override async Task DeleteAsync(int id, bool saveChanges = true)
+        {
+            await base.DeleteAsync(id, saveChanges);
+            if (!OperacaoValida()) return;
+            Notificar(EnumTipoNotificacao.Informacao, $"Conta {id} deletada com sucesso.");
+        }
+
+        protected override Expression<Func<Conta, bool>> GetExpressionFilter(object filterBase)
         {
             var filter = (ContaFilterDTO)filterBase;
             return x =>
@@ -53,7 +72,7 @@ namespace Application.Services.Cobranca
             (filter.VencimentoFinal == null || filter.VencimentoFinal >= x.DataVencimento);
         }
 
-        protected override Expression<Func<Conta, bool>> QueryDelete(int idConta) => x => x.Id == idConta;
+        protected override Expression<Func<Conta, bool>> GetExpressionDelete(int idConta) => x => x.Id == idConta;
 
         public virtual async Task<IEnumerable<RegraDiaAtraso>> ObterRegrasDiasAtrasoAsync()
         {
@@ -61,7 +80,7 @@ namespace Application.Services.Cobranca
 
             if (listRegras is null)
             {
-                NotificarErro("Nenhuma Regra para dias atrasados cadastrada.");
+                Notificar(EnumTipoNotificacao.Erro, "Nenhuma Regra para dias atrasados cadastrada.");
                 return null;
             }
             return _autoMapper.Map<IEnumerable<RegraDiaAtraso>>(listRegras);

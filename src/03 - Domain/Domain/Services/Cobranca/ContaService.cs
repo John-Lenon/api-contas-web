@@ -21,14 +21,26 @@ namespace Domain.Services.Cobranca
             entity.ValorCorrigido = Math.Round((entity.ValorOriginal + valorMulta + valorTotalJurosDias), 2);
         } 
 
-        public bool ValidarConta(Conta entity)
+        public bool ValidarInclusaoConta(Conta entity)
         {
             if(entity is null)
             {
-                NotificarErro("Algum dado da conta está num formato inválido.");
+                NotificarErro("Conta não localizada");
                 return false;
             }
             if (!ValidateFieldsEntity(new ContasAddValidator(), entity)) return false;
+
+            return true;
+        }
+
+        public bool ValidarUpdateConta(Conta entity)
+        {
+            if (entity is null)
+            {
+                NotificarErro("Conta não localizada.");
+                return false;
+            }
+            if (!ValidateFieldsEntity(new ContasUpdateValidator(), entity)) return false;
 
             return true;
         }
@@ -40,7 +52,8 @@ namespace Domain.Services.Cobranca
                 entity.QuantidadeDiasAtraso = (entity.DataPagamento - entity.DataVencimento).Days;
                 foreach (var regra in listRegrasAtraso)
                 {
-                    if (regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso && regra.DiasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
+                    var diasAtrasoMaximo = regra.DiasAtrasoMaximo == 0 ? int.MaxValue : regra.DiasAtrasoMaximo;
+                    if (regra.DiasAtrasoMinimo <= entity.QuantidadeDiasAtraso && diasAtrasoMaximo >= entity.QuantidadeDiasAtraso)
                     {
                         entity.Multa = regra.Multa;
                         entity.JurosDia = regra.JurosDia;

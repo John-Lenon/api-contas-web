@@ -4,7 +4,6 @@ using Domain.Interfaces.Application;
 using Domain.Interfaces.Repositorys.Base;
 using Domain.Utilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace Application.Services.Base
 
         public virtual async Task<List<TResult>> GetAsync<TFilter, TResult>(TFilter filter)
         {
-            var listResult = await _repository.Get(QueryGet(filter)).ToListAsync();
+            var listResult = await _repository.Get(GetExpressionFilter(filter)).ToListAsync();
             if (listResult is null || !listResult.Any()) return null;
             return _autoMapper.Map<List<TResult>>(listResult);
         }
@@ -40,38 +39,36 @@ namespace Application.Services.Base
             return result;
         }
 
-        public virtual async Task UpdateAsync<TDto>(TDto dto, object[] ids, bool saveChanges = true)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity, bool saveChanges = true)
         {
-            var entity = await _repository.GetByIdAsync(ids);
-            if(entity is null)
-            {
-                NotificarErro("Conta não encontrada.");
-                return;
-            }
-            _autoMapper.Map(dto, entity);
-            _repository.Update(entity);
-            if (saveChanges) await _repository.SaveChavesAsync();
+            var result = _repository.Update(entity);
+
+            if (saveChanges) 
+                await _repository.SaveChavesAsync();
+
+            return result;
         }
 
         public virtual async Task DeleteAsync(int id, bool saveChanges = true)
         {
-            var result = await _repository.DeleteAsync(QueryDelete(id));
+            var result = await _repository.DeleteAsync(GetExpressionDelete(id));
             if (result is null)
             {
-                NotificarErro("Conta não encontrada.");
+                Notificar(EnumTipoNotificacao.Erro, "Conta não encontrada.");
                 return;
             }
-            if (saveChanges) await _repository.SaveChavesAsync();
+            if (saveChanges) 
+                await _repository.SaveChavesAsync();
         }
 
-        protected virtual void NotificarErro(string mensagem) =>
-             _notificador.Add(new Notificacao(EnumTipoNotificacao.Error, mensagem));
+        protected virtual void Notificar(EnumTipoNotificacao tipo, string mensagem) =>
+             _notificador.Add(new Notificacao(tipo, mensagem));
 
         public virtual bool OperacaoValida() =>
-            !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Error).Count() > 0);
+            !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Erro).Count() > 0);
 
-        protected abstract Expression<Func<TEntity, bool>> QueryGet(object filter);
+        protected abstract Expression<Func<TEntity, bool>> GetExpressionFilter(object filter);
 
-        protected abstract Expression<Func<TEntity, bool>> QueryDelete(int idConta);
+        protected abstract Expression<Func<TEntity, bool>> GetExpressionDelete(int idConta);
     }
 }

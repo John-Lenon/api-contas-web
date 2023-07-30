@@ -5,10 +5,12 @@ namespace Api.Configurations
 {
     public static class ApiConfig
     {
+        public const string V1 = "1.0";
+
         public static IServiceCollection WebApiConfig(this IServiceCollection services)
         {
             services.AddControllers();
-           
+
             services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -34,15 +36,7 @@ namespace Api.Configurations
                     builder.AllowAnyOrigin()
                            .AllowAnyMethod()
                            .AllowAnyHeader()
-                           .AllowCredentials()
-                           .WithOrigins(
-                            "http://127.0.0.1:8080",
-                            "http://127.0.0.1",
-                            "http://localhost",
-                            "https://localhost", 
-                            "http://localhost:9090",
-                            "https://localhost:9090"
-                            );
+                           .AllowAnyOrigin();
                 });
             });
 

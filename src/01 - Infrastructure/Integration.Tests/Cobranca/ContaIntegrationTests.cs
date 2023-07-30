@@ -1,9 +1,10 @@
 ﻿using Api;
-using Api.Base;
+using Api.V1.Base;
 using Application.DTOs.Cobranca;
 using Bogus;
 using Domain.Entities.Cobranca;
-using Integration.Tests.Config;
+using Integration.Tests.Configurations;
+using Integration.Tests.Configurations.ContextosCompartilhados;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -23,9 +24,7 @@ namespace Integration.Tests.Cobranca
         {
             _testsFixture = testsFixure;
         }
-
-        
-
+      
         [Trait("Teste Integracao", "Contas")]
         [Fact(DisplayName = "Cadastrar Conta")]
         public async Task Contas_RealizarCadastro_DeveCadastrarComSucesso()
@@ -44,7 +43,7 @@ namespace Integration.Tests.Cobranca
             var contentResponse = JsonSerializer.Deserialize<ResponseResultDTO<ContaDTO>>(stream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             
-            Assert.NotNull(contentResponse?.Data);
+            Assert.NotNull(contentResponse?.Dados);
         }
 
         [Trait("Teste Integracao", "Contas")]
@@ -60,12 +59,11 @@ namespace Integration.Tests.Cobranca
 
             // Assert
             var stream = await response.Content.ReadAsByteArrayAsync();
-            var teste = await response.Content.ReadAsStringAsync();
 
             var contentResponse = JsonSerializer.Deserialize<ResponseResultDTO<ContaDTO>>(stream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            Assert.Null(contentResponse.Data);
+            Assert.Null(contentResponse.Dados);
             Assert.True(contentResponse.Mensagens.Count() > 0);                       
         }
 

@@ -6,7 +6,8 @@ namespace Domain.Interfaces.Services.Cobranca
 {
     public interface IContaService : IServicesBase<Conta>
     {
-        bool ValidarConta(Conta entity);
+        bool ValidarInclusaoConta(Conta entity);
+        bool ValidarUpdateConta(Conta entity);
         void CalcularValorCorrigido(Conta entity);
         void AplicarMultaContaAtrasada(Conta entity, IEnumerable<RegraDiaAtraso> listRegrasAtraso);
     }

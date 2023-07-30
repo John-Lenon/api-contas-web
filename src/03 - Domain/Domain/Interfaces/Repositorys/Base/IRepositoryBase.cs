@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace Domain.Interfaces.Repositorys.Base
 
         Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> expression);
 
-        void Update(TEntity entity);
+        TEntity Update(TEntity entity);
 
         Task<TEntity> GetByIdAsync(params object[] ids);
 

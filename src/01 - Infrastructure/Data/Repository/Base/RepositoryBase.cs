@@ -33,9 +33,10 @@ namespace Data.Repository.Base
             return result.Entity;
         }
 
-        public void Update(TEntity entity)
+        public TEntity Update(TEntity entity)
         {
-            DbSet.Update(entity);
+            var result = DbSet.Update(entity);
+            return result.Entity;
         }
 
         public async Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> expression)

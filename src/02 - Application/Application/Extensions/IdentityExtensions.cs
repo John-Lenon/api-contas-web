@@ -57,8 +57,8 @@ namespace Application.Extensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = appSettings.ValidoEm,
+                    ValidateAudience = false,
+                    //ValidAudience = appSettings.ValidoEm,
                     ValidIssuer = appSettings.Emissor
                 };
             });
@@ -66,10 +66,10 @@ namespace Application.Extensions
             return services;
         }
 
-        private static AppSettings CarregarAppSettings(IServiceCollection services, IConfiguration configuration)
+        private static ConfiguracoesJwt CarregarAppSettings(IServiceCollection services, IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection("AppSettings");
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            var appSettingsSection = configuration.GetSection(nameof(ConfiguracoesJwt));
+            var appSettings = appSettingsSection.Get<ConfiguracoesJwt>();
             services.AddScoped(item => appSettings);
             return appSettings;
         }

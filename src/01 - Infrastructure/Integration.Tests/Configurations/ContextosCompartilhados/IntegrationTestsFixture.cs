@@ -1,6 +1,7 @@
 ﻿using Api;
-using Api.Base;
+using Api.V1.Base;
 using Application.DTOs.Usuario;
+using Integration.Tests.Config;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Net.Http;
@@ -8,15 +9,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Xunit;
 
-namespace Integration.Tests.Config
+namespace Integration.Tests.Configurations.ContextosCompartilhados
 {
-    [CollectionDefinition(nameof(IntegrationWebTestsFixtureCollection))]
-    public class IntegrationWebTestsFixtureCollection : ICollectionFixture<IntegrationTestsFixure<StartupApiTests>>
-    {
-    }
-
+    // O contexto desta classe será compartilhado entre os testes
     public class IntegrationTestsFixure<TStartup> : IDisposable where TStartup : class
     {
         public readonly AppFactoryTests<TStartup> Factory;
@@ -46,7 +42,7 @@ namespace Integration.Tests.Config
             var contentResponse = JsonSerializer.Deserialize<ResponseResultDTO<string>>(stream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", contentResponse.Data);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", contentResponse.Dados);
         }
 
         public void Dispose()

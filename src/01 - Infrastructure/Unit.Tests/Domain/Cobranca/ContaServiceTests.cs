@@ -89,7 +89,7 @@ namespace Unit.Tests.Domain.Cobranca
 
             // Assert
             Assert.True(_notificador.ListNotificacoes.Count() == 4);
-            var mensagensNotificador = string.Join("", _notificador.ListNotificacoes.ToArray().Select(item => $"\n{item.Mensagem}"));
+            var mensagensNotificador = string.Join("", _notificador.ListNotificacoes.ToArray().Select(item => $"\n{item.Descricao}"));
 
             _testOutputHelper.WriteLine($"Mensagens do notificador: {mensagensNotificador}");
             Assert.False(result);

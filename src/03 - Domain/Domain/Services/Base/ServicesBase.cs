@@ -30,7 +30,7 @@ namespace Domain.Services.Base
         }
 
         public virtual void NotificarErro(string mensagem) =>
-             Notificador.Add(new Notificacao(EnumTipoNotificacao.Error, mensagem));
+             Notificador.Add(new Notificacao(EnumTipoNotificacao.Erro, mensagem));
 
     }
 
