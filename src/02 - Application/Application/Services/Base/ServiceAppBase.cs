@@ -65,7 +65,8 @@ namespace Application.Services.Base
              _notificador.Add(new Notificacao(tipo, mensagem));
 
         public virtual bool OperacaoValida() =>
-            !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Erro).Count() > 0);
+            !(_notificador.ListNotificacoes.Where(item => item.Tipo == EnumTipoNotificacao.Erro 
+            || item.Tipo == EnumTipoNotificacao.ErroInterno).Count() > 0);
 
         protected abstract Expression<Func<TEntity, bool>> GetExpressionFilter(object filter);
 
