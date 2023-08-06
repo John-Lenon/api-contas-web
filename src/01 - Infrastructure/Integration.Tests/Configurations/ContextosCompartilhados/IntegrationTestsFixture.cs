@@ -1,5 +1,4 @@
-﻿using Api;
-using Api.V1.Base;
+﻿using Api.V1.Base;
 using Application.DTOs.Usuario;
 using Integration.Tests.Config;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,6 +15,7 @@ namespace Integration.Tests.Configurations.ContextosCompartilhados
     public class IntegrationTestsFixure<TStartup> : IDisposable where TStartup : class
     {
         public readonly AppFactoryTests<TStartup> Factory;
+        //public readonly WebApplicationFactory<ProgramTests> Factory; 
         public readonly HttpClient Client;
 
         public IntegrationTestsFixure()
@@ -25,6 +25,8 @@ namespace Integration.Tests.Configurations.ContextosCompartilhados
             };
 
             Factory = new AppFactoryTests<TStartup>();
+
+            //Factory = new WebApplicationFactory<ProgramTests>();
             Client = Factory.CreateClient(clientOptions);
             RealizarLoginAsync().GetAwaiter().GetResult();
         }

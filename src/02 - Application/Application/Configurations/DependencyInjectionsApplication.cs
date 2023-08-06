@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.Services.Cobranca;
 using Application.Services.Cobranca;
 using Application.Utility;
-using AutoMapper;
 using Data.Repository.Cobranca;
 using Domain.Interfaces.Application;
 using Domain.Interfaces.Repositorys.Cobranca;
@@ -14,8 +13,7 @@ namespace Application.Configurations
     {
         public static IServiceCollection AddDependencyInjectionsApp(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());           
             services.AddScoped<IContaAppService, ContaAppService>();
             services.AddScoped<IRegraDiaAtrasoAppService, RegraDiaAtrasoAppService>();
             services.AddScoped<INotificador, Notificador>();

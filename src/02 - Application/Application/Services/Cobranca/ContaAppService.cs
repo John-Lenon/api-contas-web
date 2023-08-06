@@ -46,7 +46,7 @@ namespace Application.Services.Cobranca
 
         public async Task UpdateAsync(ContaDTO dto, object[] ids)
         {
-            dto = dto is null? new ContaDTO() : null;  
+            dto = dto is null? new ContaDTO() : dto;  
             var contaEntity = await _repository.GetByIdAsync(ids);
             _autoMapper.Map(dto, contaEntity);
             if (!_contaService.ValidarUpdateConta(contaEntity)) return;

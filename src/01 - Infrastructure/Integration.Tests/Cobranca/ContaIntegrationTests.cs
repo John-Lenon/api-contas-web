@@ -1,5 +1,4 @@
-﻿using Api;
-using Api.V1.Base;
+﻿using Api.V1.Base;
 using Application.DTOs.Cobranca;
 using Bogus;
 using Domain.Entities.Cobranca;

@@ -1,5 +1,4 @@
-﻿using Api;
-using Integration.Tests.Configurations.ContextosCompartilhados;
+﻿using Integration.Tests.Configurations.ContextosCompartilhados;
 using Xunit;
 
 namespace Integration.Tests.Configurations

@@ -14,6 +14,8 @@ namespace Application.Configurations.AutoMapper.Cobranca
                 //.ForMember(destino => destino.QuantidadeDiasAtraso, option => option.MapFrom(origem => origem.QuantidadeDiasAtraso ?? origem.QuantidadeDiasAtraso.GetValueOrDefault()))
                 //.ForMember(destino => destino.Id, option => option.MapFrom(origem => origem.Id ?? origem.Id.GetValueOrDefault()))
                 .ReverseMap();
+
+            CreateMap<Conta, ContaGetDTO>().ReverseMap();
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Unit.Tests.Domain.Cobranca
             var contaService = new ContaService(_injectorService.Object);
 
             // Act
-            var result = contaService.ValidarConta(null);
+            var result = contaService.ValidarInclusaoConta(null);
 
             // Assert
             Assert.True(_notificador.ListNotificacoes.Count() > 0);

@@ -11,17 +11,16 @@ namespace Data.Configurations
     {
         public static IServiceProvider ConfigurarBancoDados(this IServiceProvider services)
         {
-            using IServiceScope serviceScope = services.CreateScope();
+            using var serviceScope = services.CreateScope();            
             var dbContext = serviceScope.ServiceProvider.GetRequiredService<ContasWebContext>();
             dbContext.Database.Migrate();
-
-            PrepararUsuarioInicial(services);           
-            return services;
+            PrepararUsuarioInicial(serviceScope);                
+            return services;                           
         }
 
-        private static void PrepararUsuarioInicial(IServiceProvider services)
+        private static void PrepararUsuarioInicial(IServiceScope serviceScope)
         {
-            var userManager = services.GetRequiredService<UserManager<Usuario>>();
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
             var usuarioInicial = userManager.FindByEmailAsync("teste@gmail.com").GetAwaiter().GetResult();
 
             if (usuarioInicial is null)

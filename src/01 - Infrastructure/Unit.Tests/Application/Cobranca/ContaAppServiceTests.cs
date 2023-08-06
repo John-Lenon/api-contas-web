@@ -56,7 +56,7 @@ namespace Unit.Tests.Application.Cobranca
             await contaAppServiceTest.Object.AddAsync(contaDto);
 
             // Asserts            
-            _contaServiceMock.Verify(conta => conta.ValidarConta(contaEntity), Times.Once());
+            _contaServiceMock.Verify(conta => conta.ValidarInclusaoConta(contaEntity), Times.Once());
             _contaRepositoryMock.Verify(repo => repo.SaveChavesAsync(), Times.Once());
             _contaServiceMock.Verify(repo => repo.AplicarMultaContaAtrasada(contaEntity, listRegras), Times.Once());
             _contaServiceMock.Verify(repo => repo.CalcularValorCorrigido(contaEntity), Times.Once());
@@ -67,7 +67,7 @@ namespace Unit.Tests.Application.Cobranca
         private void SimularRetornoMetodosDependenciasCadastroSucesso(Conta contaEntity, ContaDTO contaDto)
         {
             _autoMapperMock.Setup(p => p.Map<Conta>(contaDto)).Returns(contaEntity);
-            _contaServiceMock.Setup(p => p.ValidarConta(contaEntity)).Returns(true);
+            _contaServiceMock.Setup(p => p.ValidarInclusaoConta(contaEntity)).Returns(true);
             _contaRepositoryMock.Setup(p => p.AddAsync(contaEntity)).ReturnsAsync(default(Conta));
         }
     }

@@ -1,26 +1,34 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Api.Configurations;
+using Api.Extensions.Middlewares;
+using Application.Configurations;
+using Application.Extensions;
+using Data.Configurations;
+using Domain.Configurations;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Api
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+builder.Services.WebApiConfig();
+builder.Services.AddSwaggerConfig();
+builder.Services.AddIdentityConfiguration(builder.Configuration);
+builder.Services.AddDependencyInjectionsApp();
+builder.Services.AddDependencyInjectionsDomain();
+
+var app = builder.Build();
+
+app.Services.ConfigurarBancoDados();
+app.UseCors("Production");
+
+app.UseMiddleware<MiddlewareException>();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+var apiDescriptorProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+app.UseSwaggerConfig(apiDescriptorProvider);
+app.Run();

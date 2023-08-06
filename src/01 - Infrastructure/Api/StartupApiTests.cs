@@ -1,21 +1,17 @@
 ﻿using Api.Configurations;
 using Application.Configurations;
 using Application.Extensions;
-using AutoMapper;
 using Data.Configurations;
 using Domain.Configurations;
-using Domain.Entities.Usuarios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Reflection;
 
-namespace Api
+namespace Integration.Tests.Configurations
 {
     public class StartupApiTests
     {
