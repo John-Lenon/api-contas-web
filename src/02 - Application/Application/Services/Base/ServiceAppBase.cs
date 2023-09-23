@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces.Services.Usuario;
+using AutoMapper;
 using Domain.Configurations;
+using Domain.Enumerators.Usuario;
 using Domain.Interfaces.Application;
 using Domain.Interfaces.Repositorys.Base;
 using Domain.Utilities;
@@ -18,12 +20,14 @@ namespace Application.Services.Base
         protected INotificador _notificador { get; }
         protected IMapper _autoMapper { get; }
         protected TRepository _repository { get; }
+        protected IUserService _userService { get; }
 
         public ServiceAppBase(InjectorService injector)
         {
             _notificador = injector.GetService<INotificador>();
             _autoMapper = injector.GetService<IMapper>();
             _repository = injector.GetService<TRepository>();
+            _userService = injector.GetService<IUserService>();
         }
 
         public virtual async Task<List<TResult>> GetAsync<TFilter, TResult>(TFilter filter)
@@ -59,6 +63,11 @@ namespace Application.Services.Base
             }
             if (saveChanges) 
                 await _repository.SaveChavesAsync();
+        }
+
+        protected virtual bool PossuiPermissao(params EnumPermissoes[] permissoesParaValidar)
+        {
+            return _userService.PossuiPermissao(permissoesParaValidar);
         }
 
         protected virtual void Notificar(EnumTipoNotificacao tipo, string mensagem) =>

@@ -1,9 +1,11 @@
 ﻿using Data.Contexts;
 using Domain.Entities.Usuarios;
+using Domain.Enumerators.Usuario;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Security.Claims;
 
 namespace Data.Configurations
 {
@@ -31,7 +33,20 @@ namespace Data.Configurations
                     Email = "teste@gmail.com",
                     EmailConfirmed = true,
                 };
+                
                 userManager.CreateAsync(user, "123456").GetAwaiter().GetResult();
+
+                var listPermissoesPadroesAdmin = new[]
+                {
+                    EnumPermissoes.USU_000005, EnumPermissoes.USU_000006, EnumPermissoes.USU_000007, 
+                    EnumPermissoes.USU_000008
+                };
+
+                foreach (var permissao in listPermissoesPadroesAdmin)
+                {
+                    userManager.AddClaimAsync(user, new Claim(nameof(EnumPermissoes), permissao.ToString()))
+                        .GetAwaiter().GetResult();
+                }
             }
         }
     }

@@ -30,4 +30,8 @@
     <Folder Include="V2\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Integration.Tests" />
+	</ItemGroup>
+
 </Project>

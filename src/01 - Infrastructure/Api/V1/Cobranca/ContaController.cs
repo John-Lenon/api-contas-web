@@ -3,6 +3,7 @@ using Api.Extensions.Atributos;
 using Api.V1.Base;
 using Application.DTOs.Cobranca;
 using Application.Interfaces.Services.Cobranca;
+using Domain.Enumerators.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Api.V1.Cobranca
 {    
     [RouterController("conta")]
-    [Authorize]
+    [AutorizationContasWeb]
     [ApiVersion(ApiConfig.V1)]
     public class ContaController : MainController
     {
@@ -27,6 +28,7 @@ namespace Api.V1.Cobranca
         }
 
         [HttpGet]
+        [PermissoesContasWeb(EnumPermissoes.USU_000001, EnumPermissoes.USU_000002)]
         [ProducesResponseType(typeof(ResponseResultDTO<IEnumerable<ContaGetDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseResultDTO<ContaGetDTO>), StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Listar contas", Tags = new[] { "Contas" })]
@@ -36,6 +38,7 @@ namespace Api.V1.Cobranca
         }
 
         [HttpPost]
+        [PermissoesContasWeb(EnumPermissoes.USU_000002)]
         [ProducesResponseType(typeof(ResponseResultDTO<ContaDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Cadastrar nova conta", Tags = new[] { "Contas" })]
@@ -45,6 +48,7 @@ namespace Api.V1.Cobranca
         }
 
         [HttpPut("{idConta}")]
+        [PermissoesContasWeb(EnumPermissoes.USU_000004)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Atualizar conta", Tags = new[] { "Contas" })]
@@ -56,6 +60,7 @@ namespace Api.V1.Cobranca
         }
 
         [HttpDelete("{idConta}")]
+        [PermissoesContasWeb(EnumPermissoes.USU_000003)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Description = "Deletar conta", Tags = new[] { "Contas" })]

@@ -1,7 +1,7 @@
 using Api.Configurations;
 using Api.Extensions.Middlewares;
 using Application.Configurations;
-using Application.Extensions;
+using Application.Extensions.Autorizacao;
 using Data.Configurations;
 using Domain.Configurations;
 using Microsoft.AspNetCore.Builder;

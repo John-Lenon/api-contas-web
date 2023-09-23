@@ -4,12 +4,15 @@ using Api.V1.Base;
 using Application.Configurations;
 using Application.DTOs.Usuario;
 using Domain.Entities.Usuarios;
+using Domain.Enumerators.Usuario;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,6 +85,36 @@ namespace Api.V1.Autenticacao
 
             NotificarErro("Usuario ou senha incorreto");
             return loginUser;
+        }
+
+        [HttpPost("dar-permissao/{IdUsuario}")]
+        [PermissoesContasWeb(EnumPermissoes.USU_000007)]
+        public async Task<Usuario> DarPermissaoParaUsuario([FromBody] IEnumerable<string> permissoes, 
+            [FromRoute]string IdUsuario)
+        {
+            var usuarioLocalizado = await _userManager.FindByIdAsync(IdUsuario);
+            
+            if(usuarioLocalizado is null)
+            {
+                NotificarErro("Usuário não encontrato.");
+                return null;
+            }else if (permissoes is null || !permissoes.Any())
+            {
+                NotificarErro("Nenhuma permissão informada para ser atribuida ao usuário.");
+                return null;
+            }
+
+            var claimsExistentes = (await _userManager.GetClaimsAsync(usuarioLocalizado)).Select(x => x.Value);
+            permissoes = permissoes.Where(x => !claimsExistentes.Contains(x));
+
+            var enumType = typeof(EnumPermissoes);
+            foreach (var permissao in permissoes)
+            {
+                if (Enum.IsDefined(enumType, permissao))
+                    await _userManager.AddClaimAsync(usuarioLocalizado, new Claim(nameof(EnumPermissoes), permissao));
+            }
+
+            return usuarioLocalizado;
         }
 
 

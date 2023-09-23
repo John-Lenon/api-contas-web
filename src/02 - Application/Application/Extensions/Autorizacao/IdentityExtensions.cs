@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Application.Extensions
+namespace Application.Extensions.Autorizacao
 {
     public static class IdentityExtensions
     {
@@ -73,5 +73,5 @@ namespace Application.Extensions
             services.AddScoped(item => appSettings);
             return appSettings;
         }
-    }    
+    }
 }

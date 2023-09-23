@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces.Services.Cobranca;
+using Application.Interfaces.Services.Usuario;
 using Application.Services.Cobranca;
+using Application.Services.Usuario;
 using Application.Utility;
 using Data.Repository.Cobranca;
 using Domain.Interfaces.Application;
@@ -20,6 +22,8 @@ namespace Application.Configurations
 
             services.AddScoped<IRegraDiaAtrasoRepository, RegraDiaAtrasoRepository>();
             services.AddScoped<IContaRepository, ContaRepository>();
+
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

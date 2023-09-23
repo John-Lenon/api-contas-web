@@ -1,6 +1,6 @@
 ﻿using Api.Configurations;
 using Application.Configurations;
-using Application.Extensions;
+using Application.Extensions.Autorizacao;
 using Data.Configurations;
 using Domain.Configurations;
 using Microsoft.AspNetCore.Builder;
@@ -8,14 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Integration.Tests.Configurations
 {
-    public class StartupApiTests
+    public class IntegrationTestsStartup
     {
-        public StartupApiTests(IConfiguration configuration)
+        public IntegrationTestsStartup(IConfiguration configuration)
         {
             Configuration = new ConfigurationBuilder()
                     .AddJsonFile($"appsettings.Testing.json")
@@ -36,8 +35,6 @@ namespace Integration.Tests.Configurations
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider,
             IServiceProvider services)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
-
             services.ConfigurarBancoDados();
 
             app.UseRouting();

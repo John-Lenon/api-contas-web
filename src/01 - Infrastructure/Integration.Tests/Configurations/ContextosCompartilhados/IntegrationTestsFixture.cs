@@ -15,18 +15,13 @@ namespace Integration.Tests.Configurations.ContextosCompartilhados
     public class IntegrationTestsFixure<TStartup> : IDisposable where TStartup : class
     {
         public readonly AppFactoryTests<TStartup> Factory;
-        //public readonly WebApplicationFactory<ProgramTests> Factory; 
         public readonly HttpClient Client;
 
         public IntegrationTestsFixure()
         {
-            var clientOptions = new WebApplicationFactoryClientOptions
-            {
-            };
+            var clientOptions = new WebApplicationFactoryClientOptions();
 
             Factory = new AppFactoryTests<TStartup>();
-
-            //Factory = new WebApplicationFactory<ProgramTests>();
             Client = Factory.CreateClient(clientOptions);
             RealizarLoginAsync().GetAwaiter().GetResult();
         }

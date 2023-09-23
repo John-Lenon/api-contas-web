@@ -1,17 +1,13 @@
 ﻿using AutoMapper;
 using Domain.Interfaces.Application;
 using Domain.Utilities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 
 namespace Api.V1.Base
 {
@@ -76,8 +72,8 @@ namespace Api.V1.Base
         {
             var modelState = context.ModelState;
             if (!modelState.IsValid)
-            {                                
-                if(!ValidarContentTypeRequest(modelState, context)) return false;
+            {
+                if (!ValidarContentTypeRequest(modelState, context)) return false;
 
                 var valoresInvalidosModelState = modelState.Where(x => x.Value.ValidationState == ModelValidationState.Invalid);
                 if (valoresInvalidosModelState.Count() == 0) return true;
@@ -90,7 +86,7 @@ namespace Api.V1.Base
 
         private void ExtrairMensagensDeErroDaModelState(IEnumerable<KeyValuePair<string, ModelStateEntry>> valoresInvalidosModelState,
             ActionExecutingContext context)
-        {            
+        {
             var listaErros = new List<Notificacao>();
             foreach (var model in valoresInvalidosModelState)
             {
@@ -115,7 +111,8 @@ namespace Api.V1.Base
                     result.ContentTypeInvalido();
                     context.Result = new BadRequestObjectResult(result);
                     return false;
-                }else if (model.Key == "")
+                }
+                else if (model.Key == "")
                 {
                     model.Value.ValidationState = ModelValidationState.Valid;
                     return true;
@@ -135,7 +132,7 @@ namespace Api.V1.Base
             Dados = data;
             Mensagens = notificacoes;
         }
-       
+
         public void ContentTypeInvalido()
         {
             Mensagens = new Notificacao[]

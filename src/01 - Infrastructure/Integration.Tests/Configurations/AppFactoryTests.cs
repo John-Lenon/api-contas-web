@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Integration.Tests.Config
 {
@@ -10,7 +12,7 @@ namespace Integration.Tests.Config
         protected override IHostBuilder CreateHostBuilder()
         {
             return Host.CreateDefaultBuilder().ConfigureWebHostDefaults(builder =>
-            {
+            {                
                 builder.UseStartup<TStartup>();
             });
         }

@@ -17,9 +17,9 @@ namespace Integration.Tests.Cobranca
     [Collection(nameof(IntegrationWebTestsFixtureCollection))]
     public class ContaIntegrationTests
     {
-        private readonly IntegrationTestsFixure<StartupApiTests> _testsFixture;
+        private readonly IntegrationTestsFixure<IntegrationTestsStartup> _testsFixture;
 
-        public ContaIntegrationTests(IntegrationTestsFixure<StartupApiTests> testsFixure)
+        public ContaIntegrationTests(IntegrationTestsFixure<IntegrationTestsStartup> testsFixure)
         {
             _testsFixture = testsFixure;
         }
